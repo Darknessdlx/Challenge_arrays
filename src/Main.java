@@ -1,15 +1,40 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.Collections;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner lectura = new Scanner(System.in);
+        System.out.println("Escriba el límite de la tarjeta: ");
+        double limite = lectura.nextDouble();
+        TarjetaDeCredito tarjeta = new TarjetaDeCredito(limite);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        int salir = 1;
+        while(salir != 0) {
+            System.out.println("Escriba la descripción de la compra:");
+            String descripcion = lectura.next();
+
+            System.out.println("Escriba el valor de la compra:");
+            double valor = Double.valueOf(lectura.next());
+
+            Compra compra = new Compra(valor, descripcion);
+            boolean compraRealizada = tarjeta.lanzarCompra(compra);
+
+            if (compraRealizada) {
+                System.out.println("Compra realizada!");
+                System.out.println("Escriba 0 para salir o 1 para continuar");
+                salir = lectura.nextInt();
+            } else {
+                System.out.println("Saldo insuficiente!");
+                salir = 0;
+            }
         }
+        System.out.println("***********************");
+        System.out.println("COMPRAS REALIZADAS:\n");
+        Collections.sort(tarjeta.getListaDeCompras());
+        for (Compra compra : tarjeta.getListaDeCompras()) {
+            System.out.println(compra.getDescripcion() + " - " +compra.getValor());
+        }
+        System.out.println("\n***********************");
+        System.out.println("\nSaldo de la tarjeta: " +tarjeta.getSaldo());
     }
 }
